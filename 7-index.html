@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Case Prep</title>
+<style>
+  :root {
+    --page: #fafafa;
+    --card: #ffffff;
+    --ink: #1a1a1a;
+    --ink-2: #5c5c5c;
+    --hairline: #e3e3e3;
+    --warn-bg: #fff7e6;
+    --warn-border: #f0d9a8;
+    --note-bg: #eef5ff;
+    --note-border: #c3d9f5;
+    --accent: #1a1a1a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 24px 16px 64px;
+  }
+  .card { max-width: 720px; margin: 0 auto; background: var(--card); border: 1px solid var(--hairline); border-radius: 12px; padding: 28px 24px 32px; }
+  h1 { font-size: 24px; margin: 0 0 4px; }
+  h2 { font-size: 17px; margin: 0 0 10px; }
+  .fact-line { color: var(--ink-2); font-size: 14px; margin: 0 0 12px; }
+  .intro { color: var(--ink-2); margin: 0 0 20px; }
+  .group { border-top: 1px solid var(--hairline); padding: 20px 0 4px; margin-top: 20px; }
+  .group:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+  .group-label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); margin: 0 0 6px; }
+  label { display: block; font-size: 14px; color: var(--ink-2); margin: 12px 0 4px; }
+  input[type="text"], textarea {
+    width: 100%; border: 1px solid var(--hairline); border-radius: 6px; padding: 10px 12px;
+    font: inherit; color: var(--ink); background: var(--page);
+  }
+  textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; resize: vertical; }
+  button {
+    font: inherit; border-radius: 6px; border: 1px solid var(--accent); padding: 9px 16px;
+    background: var(--accent); color: #fff; cursor: pointer; margin-top: 12px;
+  }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  button.ghost { background: transparent; color: var(--ink); border-color: var(--hairline); }
+  button.secondary { background: transparent; color: var(--ink); border-color: var(--ink); }
+  .caption { font-size: 13px; color: var(--ink-2); margin: 6px 0 0; }
+  .callout { border-radius: 8px; padding: 12px 14px; margin: 10px 0; font-size: 14.5px; }
+  .callout.note { background: var(--note-bg); border: 1px solid var(--note-border); }
+  .callout .callout-title { font-weight: 600; display: block; margin-bottom: 2px; }
+  .hints { margin: 6px 0 0; padding-left: 22px; color: var(--ink-2); font-size: 14px; }
+  .hints li { margin: 3px 0; }
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  .closing { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--hairline); color: var(--ink-2); font-size: 13.5px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- Stage: paste -->
+  <div id="stage-paste">
+    <h1>Product Case Prep</h1>
+    <p class="fact-line">Free. Nothing uploaded.</p>
+    <p class="intro">Paste a product interview question or case prompt. Get a structured outline to think in: clarifying questions to ask first, then the sections a strong answer usually moves through, with hints for the type of question it looks like. The structure guides; the answers are yours. Nothing you type leaves this page.</p>
+
+    <div class="group">
+      <p class="group-label">Step 1</p>
+      <h2>Paste the question</h2>
+      <label for="case-paste">Interview question or case prompt</label>
+      <textarea id="case-paste" rows="5" placeholder="Example: Design a product for people learning to cook. Or: How would you improve the search experience? Or: What metrics would you track for this feature?"></textarea>
+      <button id="btn-analyse" disabled>Build my outline</button>
+      <p class="caption hidden" id="paste-hint">Paste the question first.</p>
+    </div>
+
+    <div class="group" id="honesty-paste"></div>
+    <p class="closing">Your question and notes are held only in this page while it is open. Preparing another case clears them.</p>
+  </div>
+
+  <!-- Stage: outline -->
+  <div id="stage-review" class="hidden">
+    <h1 id="review-title">Product Case Prep</h1>
+    <p class="fact-line" id="review-type"></p>
+    <p class="intro" id="review-intro"></p>
+
+    <div class="group">
+      <p class="group-label">Step 2: clarifying questions worth asking first</p>
+      <div id="clarify-list"></div>
+      <label for="clarify-notes">Your own clarifying questions and assumptions</label>
+      <textarea id="clarify-notes" rows="3"></textarea>
+    </div>
+
+    <div class="group">
+      <p class="group-label">Step 3: your answer outline</p>
+      <div id="section-list"></div>
+    </div>
+
+    <div class="group">
+      <p class="group-label">Step 4: copy your outline</p>
+      <p class="caption">The outline is your own words under each heading. No scoring, no verdict on whether the answer is good.</p>
+      <button class="secondary" id="btn-copy">Copy this outline</button>
+      <p class="caption hidden" id="copy-done">Copied.</p>
+    </div>
+
+    <button class="ghost" id="btn-reset">Prepare another case</button>
+
+    <div class="group" id="honesty-review"></div>
+    <p class="closing">Your question and notes are held only in this page while it is open. Nothing is saved or sent.</p>
+  </div>
+
+</div>
+
+<script>
+// ===PARSE-BEGIN===
+const CASE_TYPES = [
+    { tag: 'design', label: 'Product design question',
+      match: /\b(design|build|create|launch)\b.{0,60}\b(product|app|feature|service|tool|platform|experience)\b|\bdesign\b.{0,40}\bfor\b/i,
+      intro: 'This looks like a design question. A strong answer usually narrows the users first, picks one painful problem, offers a few solutions, chooses one with a reason, and says how success would be measured.',
+      clarify: [
+        'Who is this for, and is there a specific user group the interviewer cares about?',
+        'Are we designing for mobile, web, or either?',
+        'Is this a new product inside an existing company, or standalone?',
+        'Any constraints on time, budget, or geography I should assume?'
+      ],
+      sections: [
+        { head: 'Users and their contexts', hints: ['Name 2-3 distinct user groups, then choose one to focus on and say why.', 'Note when and where they face this problem.'] },
+        { head: 'The painful problems', hints: ['List the top problems this group has today.', 'Pick the one problem worth solving first, with a reason.'] },
+        { head: 'Solution options', hints: ['Sketch 2-3 different solutions, not one.', 'For each: what it is, and one strength and one weakness.'] },
+        { head: 'My pick and why', hints: ['Choose one solution and justify it: reach, impact, effort, confidence.', 'Say what you deliberately left out.'] },
+        { head: 'Success metrics and guardrails', hints: ['One primary metric, 2-3 supporting ones.', 'One guardrail metric that should not get worse.'] },
+        { head: 'Risks and what I would test first', hints: ['The riskiest assumption in the pick.', 'The cheapest test of that assumption.'] }
+      ] },
+    { tag: 'metrics', label: 'Metrics question',
+      match: /\b(metric|measure|measurement|kpi|track|analytics|success of|how would you know)\b/i,
+      intro: 'This looks like a metrics question. A strong answer usually ties metrics to the goal of the feature, walks the user journey or loop, picks a primary metric with supporting ones, and names guardrails.',
+      clarify: [
+        'What is the goal of this feature or product right now: adoption, retention, revenue?',
+        'What stage is it at: just launched, growing, mature?',
+        'Are there existing baselines I can assume?'
+      ],
+      sections: [
+        { head: 'The goal this metric set serves', hints: ['One sentence: what the feature is trying to achieve and for whom.'] },
+        { head: 'The user journey or loop', hints: ['The steps a user moves through, or the loop that keeps them coming back.', 'Metrics attach to steps, so get the steps right first.'] },
+        { head: 'Primary metric', hints: ['The single number that best represents value delivered.', 'Why this one and not a vanity alternative.'] },
+        { head: 'Supporting metrics', hints: ['2-3 numbers that explain movement in the primary one.'] },
+        { head: 'Guardrails', hints: ['What could look good on the primary metric while hurting something else.', 'The number you watch so that does not happen.'] }
+      ] },
+    { tag: 'improve', label: 'Improvement question',
+      match: /\b(improve|fix|redesign|better|increase|grow|reduce|optimi[sz]e)\b/i,
+      intro: 'This looks like an improvement question. A strong answer usually states what "better" means, finds where the current experience breaks, offers options, prioritises one, and defines how the change would be measured.',
+      clarify: [
+        'What does "improve" mean here: usage, satisfaction, revenue, speed?',
+        'Which user group or journey step matters most?',
+        'What data or research about the current experience can I assume exists?',
+        'Any constraints: platform, timeline, things I cannot change?'
+      ],
+      sections: [
+        { head: 'Goal of the improvement', hints: ['Write the one outcome "better" means, in measurable words.', 'Note who benefits: users, the business, or both.'] },
+        { head: 'Where the current experience breaks', hints: ['Walk the current journey step by step.', 'Mark the steps where users drop, struggle, or complain, and why.'] },
+        { head: 'Improvement options', hints: ['2-3 options targeting different break points.', 'One strength and one weakness each.'] },
+        { head: 'My pick and why', hints: ['Choose one, justified by expected impact vs effort.', 'What you deliberately did not change.'] },
+        { head: 'How I would measure the change', hints: ['The metric that proves the improvement.', 'A guardrail: what must not get worse.', 'How long before you trust the result.'] }
+      ] },
+    { tag: 'strategy', label: 'Strategy question',
+      match: /\b(should (we|the company|they)|strategy|enter|market|compete|competitor|moneti[sz]e|pricing|expand|pivot)\b/i,
+      intro: 'This looks like a strategy question. A strong answer usually states the goal and constraints, lays out real options with tradeoffs, recommends one, and names the risks.',
+      clarify: [
+        'What is the business goal behind this decision?',
+        'What constraints are real: money, team, time, brand?',
+        'What do we know about the users and competitors involved?'
+      ],
+      sections: [
+        { head: 'Goal and constraints', hints: ['The decision in one sentence, plus what success looks like.', 'The constraints that rule options out.'] },
+        { head: 'Options on the table', hints: ['2-3 genuinely different options, including doing nothing where honest.', 'Tradeoffs of each: upside, cost, risk.'] },
+        { head: 'My recommendation', hints: ['The option you would take and the reasoning.', 'What evidence would change your mind.'] },
+        { head: 'Risks and mitigation', hints: ['The biggest way this goes wrong.', 'What you would watch early.'] }
+      ] }
+];
+
+const GENERAL = { tag: 'general', label: 'General product question',
+    intro: 'This did not match a specific question type, so the outline stays general: clarify first, structure the problem, reason through options, and close with how you would know the answer worked.',
+    clarify: [
+        'What exactly is being asked, in my own words?',
+        'Who are the users or stakeholders involved?',
+        'What constraints or assumptions should I state out loud?'
+    ],
+    sections: [
+        { head: 'The problem, restated', hints: ['One sentence in your own words.', 'The goal behind the question.'] },
+        { head: 'Users and their needs', hints: ['Who is affected and what they need.'] },
+        { head: 'Options and tradeoffs', hints: ['2-3 approaches with one strength and one weakness each.'] },
+        { head: 'My answer and why', hints: ['Your pick, the reasoning, and what you set aside.'] },
+        { head: 'How I would know it worked', hints: ['The signal or metric that tells you the answer held up.'] }
+    ] };
+
+function classifyCase(question) {
+    for (const t of CASE_TYPES) {
+        if (t.match.test(question)) return t;
+    }
+    return GENERAL;
+}
+// ===PARSE-END===
+
+(function () {
+    const $ = (id) => document.getElementById(id);
+    let caseType = null;
+
+    const qEl = $('case-paste');
+    const btn = $('btn-analyse');
+
+    qEl.addEventListener('input', () => {
+        const len = qEl.value.trim().length;
+        btn.disabled = len < 15;
+        $('paste-hint').classList.toggle('hidden', !(len > 0 && len < 15));
+    });
+
+    btn.addEventListener('click', () => {
+        caseType = classifyCase(qEl.value);
+        $('stage-paste').classList.add('hidden');
+        $('stage-review').classList.remove('hidden');
+        renderReview();
+        window.scrollTo(0, 0);
+    });
+
+    $('btn-reset').addEventListener('click', () => {
+        $('stage-review').classList.add('hidden');
+        $('stage-paste').classList.remove('hidden');
+        qEl.value = '';
+        btn.disabled = true;
+        $('paste-hint').classList.add('hidden');
+        caseType = null;
+        window.scrollTo(0, 0);
+    });
+
+    $('btn-copy').addEventListener('click', () => {
+        const text = outlineText();
+        const done = () => {
+            $('copy-done').classList.remove('hidden');
+            setTimeout(() => $('copy-done').classList.add('hidden'), 2000);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, () => legacyCopy(text, done));
+        } else {
+            legacyCopy(text, done);
+        }
+    });
+
+    function legacyCopy(text, done) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+
+    function el(tag, className, text) {
+        const e = document.createElement(tag);
+        if (className) e.className = className;
+        if (text !== undefined) e.textContent = text;
+        return e;
+    }
+
+    function renderReview() {
+        $('review-type').textContent = caseType.label;
+        $('review-intro').textContent = caseType.intro;
+
+        const cl = $('clarify-list');
+        cl.innerHTML = '';
+        const ul = el('ul', 'hints');
+        caseType.clarify.forEach((q) => ul.appendChild(el('li', null, q)));
+        cl.appendChild(ul);
+
+        const sl = $('section-list');
+        sl.innerHTML = '';
+        caseType.sections.forEach((s, i) => {
+            const g = el('div', 'group');
+            g.appendChild(el('p', 'group-label', 'Section ' + (i + 1)));
+            g.appendChild(el('h2', null, s.head));
+            const hu = el('ul', 'hints');
+            s.hints.forEach((h) => hu.appendChild(el('li', null, h)));
+            g.appendChild(hu);
+            const ta = el('textarea');
+            ta.rows = 3;
+            ta.id = 'section-' + i;
+            ta.placeholder = 'Your answer for this section';
+            g.appendChild(ta);
+            sl.appendChild(g);
+        });
+
+        renderHonesty($('honesty-review'));
+    }
+
+    function outlineText() {
+        const linesOut = [];
+        linesOut.push('Product case outline');
+        linesOut.push('Question: ' + qEl.value.trim().split(/\r?\n/)[0].slice(0, 120));
+        linesOut.push('Type detected: ' + caseType.label);
+        linesOut.push('');
+        linesOut.push('Clarifying questions and assumptions');
+        linesOut.push($('clarify-notes').value.trim() || '(none noted)');
+        caseType.sections.forEach((s, i) => {
+            linesOut.push('');
+            linesOut.push(s.head);
+            const v = $('section-' + i).value.trim();
+            linesOut.push(v || '(not filled)');
+        });
+        linesOut.push('');
+        linesOut.push('Prepared by the candidate. This outline gives no score and no verdict on the answer.');
+        return linesOut.join('\n');
+    }
+
+    function renderHonesty(mount) {
+        mount.innerHTML = '';
+        mount.appendChild(el('p', 'group-label', 'Honesty'));
+        mount.appendChild(el('h2', null, 'What this tool does not do'));
+        const ul = el('ul');
+        [
+            'It does not answer the question. It holds a structure while you think.',
+            'Question-type detection is keyword-based; if the label looks wrong, the general outline still works.',
+            'No structure guarantees a good interview. Interviewers reward clear thinking, not filled templates.',
+            'It never scores your outline and never says whether an answer is right.',
+            'The tool sends nothing you type anywhere. What you paste is processed on your device and disappears when you leave.'
+        ].forEach((t) => ul.appendChild(el('li', null, t)));
+        mount.appendChild(ul);
+    }
+
+    renderHonesty($('honesty-paste'));
+})();
+</script>
+</body>
+</html>

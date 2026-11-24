@@ -2,6 +2,8 @@
 
 Paste a product interview question or case prompt. Get a structured outline to think in: clarifying questions to ask first, then the sections a strong answer usually moves through, with hints for the type of question it looks like. The structure guides; the answers are yours.
 
+**Try it:** https://shivangipriya.github.io/product-case-prep/ - runs in your browser, no signup.
+
 ## Why this exists
 
 Product interviews reward clear structure under time pressure. The structure is learnable; the thinking is not copyable. This tool holds the structure so prep time goes into the thinking.
